@@ -1,0 +1,335 @@
+#binary search
+int f(vector<int>&arr,int target,int low,int high){
+    if(low>high) return -1;
+    int mid=(low+high)/2;
+    if(arr[mid]==target) return mid;
+    else if(arr[mid]<target) return f(arr,target,mid+1,high);
+    else return f(arr,target,low,mid-1);
+}
+int search(vector<int> &nums, int target) {
+    return f(nums,target,0,nums.size()-1);
+}
+
+###lower bound
+int f(vector<int>&arr,int n,int x,int low,int high){
+	int ans=n;
+	while(low<=high){
+	int mid=(low+high)/2;
+	if(arr[mid]>=x){
+       ans=mid;
+		high=mid-1;
+	}
+	else{
+	low=mid+1;
+	}
+	}
+	return ans;
+}
+int lowerBound(vector<int> arr, int n, int x) {
+	return f(arr,n,x,0,n-1);
+}
+##upper bound
+int f(vector<int>&arr,int n,int x,int low,int high){
+	int ans=n;
+	while(low<=high){
+	int mid=(low+high)/2;
+	if(arr[mid]>x){
+		ans=mid;
+		high=mid-1;
+	}
+	else{
+	low=mid+1;
+	}
+	}
+	return ans;
+}
+int upperBound(vector<int> &arr, int x, int n) {
+	return f(arr,n,x,0,n-1);
+}
+###search insert position
+int searchInsert(vector<int>& arr, int m)
+{
+	int ans=arr.size();
+	int low=0,high=ans-1;
+	while(low<=high){
+	int mid=(low+high)/2;
+	if(arr[mid]>=m){
+       ans=mid;
+		high=mid-1;
+	}
+	else{
+	low=mid+1;
+	}
+	}
+	return ans;
+}
+###ceil in sorted array
+int f(int arr[],int n,int x,int low,int high){
+	int ans=-1;
+	while(low<=high){
+	int mid=(low+high)/2;
+	if(arr[mid]>=x){
+       ans=arr[mid];
+		high=mid-1;
+	}
+	else{
+	low=mid+1;
+	}
+	}
+	return ans;
+}
+int f1(int arr[],int n,int x,int low,int high){
+	int ans=-1;
+	while(low<=high){
+	int mid=(low+high)/2;
+	if(arr[mid]<=x){
+		ans=arr[mid];
+		low=mid+1;
+	}
+	else{
+	high=mid-1;
+	}
+	}
+	return ans;
+}
+ 
+pair<int, int> getFloorAndCeil(int arr[], int n, int x) {
+	sort(arr,arr+n);
+	int lb=f(arr,n,x,0,n-1);
+	int ub=f1(arr,n,x,0,n-1);
+    pair<int,int>p;
+	p.first=ub;
+	p.second=lb;
+	return p;
+}
+##first and last occurence of a element
+int f(vector<int>&arr,int n,int x,int low,int high){
+	int ans=n;
+	while(low<=high){
+	int mid=(low+high)/2;
+	if(arr[mid]>=x){
+       ans=mid;
+		high=mid-1;
+	}
+	else{
+	low=mid+1;
+	}
+	}
+	return ans;
+}
+int f1(vector<int>&arr,int n,int x,int low,int high){
+	int ans=n;
+	while(low<=high){
+	int mid=(low+high)/2;
+	if(arr[mid]>x){
+		ans=mid;
+		high=mid-1;
+	}
+	else{
+	low=mid+1;
+	}
+	}
+	return ans;
+}
+ 
+pair<int, int> firstAndLastPosition(vector<int>& arr, int n, int k)
+{
+    int lb=f(arr,n,k,0,n-1);
+    if(arr[lb]!=k || lb==n) return {-1,-1};
+    int ub=f1(arr,n,k,0,n-1);
+    return {lb,ub-1};
+}
+###no of occurences in a array
+int f(vector<int>&arr,int n,int x,int low,int high){
+	int ans=n;
+	while(low<=high){
+	int mid=(low+high)/2;
+	if(arr[mid]>=x){
+       ans=mid;
+		high=mid-1;
+	}
+	else{
+	low=mid+1;
+	}
+	}
+	return ans;
+}
+int f1(vector<int>&arr,int n,int x,int low,int high){
+	int ans=n;
+	while(low<=high){
+	int mid=(low+high)/2;
+	if(arr[mid]>x){
+		ans=mid;
+		high=mid-1;
+	}
+	else{
+	low=mid+1;
+	}
+	}
+	return ans;
+}
+ 
+int count(vector<int>& arr, int n, int x) 
+{
+    int lb=f(arr,n,x,0,n-1);
+    if(arr[lb]!=x || lb==n) return 0;
+    int ub=f1(arr,n,x,0,n-1);
+	if(lb==ub) return 1;
+    return ub-lb;
+}
+
+###search in a rotated array 1
+int f(vector<int>&arr,int n,int x){
+    int low=0;
+    int high=n-1;
+    while(low<=high){
+          int mid=(low+high)/2;
+          if(arr[mid]==x){
+              return mid;
+          }
+          if(arr[low]<=arr[mid]){
+                 if(arr[low]<=x && x<=arr[mid]){
+                     high=mid-1;
+                 }
+                 else{
+                     low=mid+1;
+                 }
+          }
+          else {
+               if(arr[mid]<=x && arr[high]>=x){
+                     low=mid+1;
+                 }
+                 else{
+                     high=mid-1;
+                 }
+          }  
+          
+    }
+    return -1;
+}
+int search(vector<int>& arr, int n, int k)
+{
+    return f(arr,n,k);
+}
+###search in rotated array 2
+bool f(vector<int>&arr,int n,int x){
+    int low=0;
+    int high=n-1;
+    while(low<=high){
+          int mid=(low+high)/2;
+          if(arr[mid]==x){
+              return true;
+          }
+          if(arr[low]<=arr[mid]){
+                 if(arr[low]<=x && x<=arr[mid]){
+                     high=mid-1;
+                 }
+                 else{
+                     low=mid+1;
+                 }
+          }
+          else {
+               if(arr[mid]<=x && arr[high]>=x){
+                     low=mid+1;
+                 }
+                 else{
+                     high=mid-1;
+                 }
+          }  
+          
+    }
+    return false;
+}
+
+bool searchInARotatedSortedArrayII(vector<int>&A, int key) {
+   return f(A,A.size(),key);
+}
+###min element in rotated sorted array
+int f(vector<int>&arr,int n){
+    int low=0;
+    int high=n-1;
+	int ans=1e9;
+    while(low<=high){
+          int mid=(low+high)/2;
+          if(arr[low]<=arr[mid]){
+                ans=min(ans,arr[low]);
+				low=mid+1;
+          }
+          else {
+              ans=min(ans,arr[mid]);
+			  high=mid-1;
+          }  
+    }
+    return ans;
+}
+int findMin(vector<int>& arr)
+{
+    return f(arr,arr.size());
+}
+###element occured 
+int f(vector<int>&arr,int n){
+    int low=0;
+    int high=n-1;
+	int ans=1e9;
+    int index=-1;
+    while(low<=high){
+          int mid=(low+high)/2;
+          if(arr[low]<=arr[mid]){
+              if(arr[low]<ans){
+                  index=low;
+                ans=arr[low];
+              }
+				low=mid+1;
+          }
+          else {
+              if(arr[mid]<ans){
+                  index=mid;
+              ans=arr[mid];
+              }
+			  high=mid-1;
+          }  
+    }
+    return index;
+}
+int findKRotation(vector<int> &arr)
+{
+    return f(arr,arr.size());
+}
+###single element
+int singleNonDuplicate(vector<int>& arr)
+{
+	int n=arr.size();
+	if(arr[0]!=arr[1]) return arr[0];
+	if(arr[n-1]!=arr[n-2]) return arr[n-1];
+	int low=1,high=n-2;
+	while(low<=high){
+		int mid=(low+high)/2;
+		if(arr[mid]!=arr[mid-1] && arr[mid]!=arr[mid+1]) return arr[mid];
+		if((mid%2==1 &&arr[mid]==arr[mid-1]) ||mid%2==0 && arr[mid]==arr[mid+1]){
+			low=mid+1;
+		}
+		else{
+			high=mid-1;
+		}
+	}
+	return -1;
+}
+###peak element
+int findPeakElement(vector<int> &arr) {
+    int n=arr.size();
+    if(n==1) return 0;;
+    if(arr[0]>arr[1]) return 0;
+    if(arr[n-1]>arr[n-2]) return n-1;
+    int low=1,high=n-2;
+    while(low<=high){
+        int mid=(low+high)/2;
+        if(arr[mid]>arr[mid-1] && arr[mid]>arr[mid+1]){
+            return mid;
+        }
+        if(arr[mid]>arr[mid-1]) low=mid+1;
+        else high=mid-1;
+    }
+    return -1;
+}
+
+
